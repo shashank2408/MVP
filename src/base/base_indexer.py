@@ -2,6 +2,8 @@
 
 from abc import ABC, abstractmethod
 
+from base.models import EnrichedProduct
+
 
 class BaseIndexer(ABC):
     @abstractmethod
@@ -9,10 +11,14 @@ class BaseIndexer(ABC):
         """Create an index if it does not already exist."""
 
     @abstractmethod
-    def index_document(self, index_name: str, document: dict, document_id: str | None = None) -> dict:
+    def index_document(
+        self,
+        index_name: str,
+        document: EnrichedProduct,
+        document_id: str | None = None,
+    ) -> dict:
         """Index a single document."""
 
     @abstractmethod
-    def bulk_index(self, index_name: str, documents: list[dict]) -> list[dict]:
+    def bulk_index(self, index_name: str, documents: list[EnrichedProduct]) -> list[dict]:
         """Index multiple documents."""
-

@@ -1,6 +1,4 @@
 """Enrichment package."""
 
-from enrichment.base_enricher import Enricher
+from src.base.base_enricher import BaseEnricher
 from enrichment.product_enricher import ProductEnricher
-
-__all__ = ["Enricher", "ProductEnricher"]

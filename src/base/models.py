@@ -1,7 +1,8 @@
 """Dataclasses shared across the product search MVP."""
 
 from dataclasses import asdict, dataclass, field
-
+from enum import Enum
+from datetime import datetime
 
 @dataclass
 class Product:
@@ -31,4 +32,21 @@ class EnrichedProduct(Product):
     search_keywords: list[str] = field(default_factory=list)
     semantic_text: str = ""
     popularity: PopularitySignals = field(default_factory=PopularitySignals)
-    last_event_timestamp: str = ""
+
+class EventType(Enum):
+    PRODUCT_CREATED = "PRODUCT_CREATED"
+    PRODUCT_VIEWED = "PRODUCT_VIEWED"
+    PRODUCT_ADDED_TO_CART = "PRODUCT_ADDED_TO_CART"
+    PRODUCT_ADDED_TO_WISHLIST = "PRODUCT_ADDED_TO_WISHLIST"
+    PRODUCT_SOLD = "PRODUCT_SOLD"
+    PRODUCT_RETURNED = "PRODUCT_RETURNED"
+    PRODUCT_RESTOCKED = "PRODUCT_RESTOCKED"
+    PRODUCT_DISCOUNTED = "PRODUCT_DISCOUNTED"
+
+
+@dataclass
+class Event:
+    event_id: str
+    event_type: EventType
+    product: Product
+    timestamp: datetime

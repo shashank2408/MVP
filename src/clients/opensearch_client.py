@@ -1,10 +1,10 @@
 """Minimal OpenSearch client for the local MVP."""
 
-from connectors.base_connector import BaseConnector
+from base.base_client import BaseClient
 from opensearchpy import OpenSearch
 
 
-class OpenSearchClient(BaseConnector):
+class OpenSearchClient(BaseClient):
     def __init__(self, host: str = "localhost", port: int = 9200) -> None:
         self.host = host
         self.port = port
@@ -32,3 +32,4 @@ class OpenSearchClient(BaseConnector):
         transport = getattr(self.client, "transport", None)
         if transport is not None:
             transport.close()
+

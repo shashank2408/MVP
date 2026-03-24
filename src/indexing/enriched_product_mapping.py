@@ -5,7 +5,7 @@ from types import UnionType
 from typing import get_args, get_origin
 
 from base.models import EnrichedProduct, PopularitySignals
-from indexing.base_mapping import BaseMappingBuilder
+from base.base_mapping import BaseMappingBuilder
 
 
 class EnrichedProductMappingBuilder(BaseMappingBuilder):
@@ -15,7 +15,6 @@ class EnrichedProductMappingBuilder(BaseMappingBuilder):
         "brand": {"type": "keyword"},
         "locale": {"type": "keyword"},
         "tags": {"type": "keyword"},
-        "last_event_timestamp": {"type": "date"},
         "semantic_text": {"type": "text"},
     }
 
@@ -63,4 +62,3 @@ class EnrichedProductMappingBuilder(BaseMappingBuilder):
                 return self._map_python_type(non_none_types[0])
 
         return {"type": "text"}
-

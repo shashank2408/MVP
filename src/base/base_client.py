@@ -1,9 +1,9 @@
-"""Base connector contract for external systems."""
+"""Base client contract for external systems."""
 
 from abc import ABC, abstractmethod
 
 
-class BaseConnector(ABC):
+class BaseClient(ABC):
     @abstractmethod
     def connect(self) -> None:
         """Initialize the underlying client connection."""
@@ -14,5 +14,5 @@ class BaseConnector(ABC):
 
     @abstractmethod
     def close(self) -> None:
-        """Release connector resources."""
+        """Release client resources."""
 
