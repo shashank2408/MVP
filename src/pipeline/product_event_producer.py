@@ -1,6 +1,6 @@
 from base.base_producer import BaseProducer
 from base.models import Event, EventType, Product
-import datetime
+from datetime import datetime
 from clients.kafka_client import KafkaClient
 
 class ProductEventProducer(BaseProducer):

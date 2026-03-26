@@ -6,7 +6,8 @@ from pathlib import Path
 from clients.kafka_client import KafkaClient, KafkaClientType
 from clients.opensearch_client import OpenSearchClient
 from enrichment.product_enricher import ProductEnricher
-from indexing.enriched_product_mapping import EnrichedProductMappingBuilder
+from indexing.index_config import SearchType
+from indexing.index_config_factory import IndexConfigFactory
 from indexing.opensearch_indexer import OpenSearchIndexer
 from pipeline.product_event_consumer import ProductEventConsumer
 from pipeline.product_event_producer import ProductEventProducer
@@ -58,12 +59,18 @@ def build_consumer(
     enricher = ProductEnricher(load_tags(tags_path))
     opensearch_client = OpenSearchClient(host=opensearch_host, port=opensearch_port)
     indexer = OpenSearchIndexer(opensearch_client)
-    mapping_builder = EnrichedProductMappingBuilder()
+    index_config = IndexConfigFactory().build([
+        SearchType.KEYWORD,
+        SearchType.FUZZY,
+        SearchType.PHRASE,
+        SearchType.VECTOR,
+        SearchType.HYBRID,
+    ])
 
     if not opensearch_client.health_check():
         raise ConnectionError(f"OpenSearch is not reachable at {opensearch_host}:{opensearch_port}")
 
-    indexer.create_index(index_name, mapping_builder.build())
+    indexer.create_index(index_name, index_config)
 
     return ProductEventConsumer(
         kafka_client=kafka_client,

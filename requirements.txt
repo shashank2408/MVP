@@ -1,4 +1,8 @@
 opensearch-py
 requests
 pandas
+kafka-python-ng
+sentence-transformers
+fastapi
+uvicorn[standard]
 

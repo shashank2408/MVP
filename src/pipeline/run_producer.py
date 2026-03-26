@@ -21,6 +21,7 @@ def main() -> None:
     for payload in events:
         producer.emit(payload)
 
+    producer.kafka_client.close()
     print(f"Published {len(events)} events to topic '{args.topic}'")
 
 

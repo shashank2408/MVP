@@ -9,6 +9,8 @@ from base.base_mapping import BaseMappingBuilder
 
 
 class EnrichedProductMappingBuilder(BaseMappingBuilder):
+    SKIP_FIELDS = {"semantic_embedding"}
+
     FIELD_OVERRIDES = {
         "product_id": {"type": "keyword"},
         "category": {"type": "keyword"},
@@ -23,6 +25,8 @@ class EnrichedProductMappingBuilder(BaseMappingBuilder):
 
         for field_info in fields(EnrichedProduct):
             field_name = field_info.name
+            if field_name in self.SKIP_FIELDS:
+                continue
             if field_name in self.FIELD_OVERRIDES:
                 properties[field_name] = self.FIELD_OVERRIDES[field_name]
                 continue

@@ -3,18 +3,22 @@
 from base.base_indexer import BaseIndexer
 from base.models import EnrichedProduct
 from clients.opensearch_client import OpenSearchClient
+from indexing.index_config import IndexConfig
 
 
 class OpenSearchIndexer(BaseIndexer):
     def __init__(self, client: OpenSearchClient) -> None:
         self.client = client
 
-    def create_index(self, index_name: str, body: dict | None = None) -> dict:
+    def create_index(self, index_name: str, config: IndexConfig | None = None) -> dict:
         if self.client.client is None:
             self.client.connect()
         if self.client.client.indices.exists(index=index_name):
             return {"acknowledged": True, "message": f"Index '{index_name}' already exists"}
-        return self.client.client.indices.create(index=index_name, body=body or {})
+        body: dict = {}
+        if config is not None:
+            body = {"settings": config.settings, "mappings": config.mappings}
+        return self.client.client.indices.create(index=index_name, body=body)
 
     def index_document(
         self,

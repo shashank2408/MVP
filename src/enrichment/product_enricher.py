@@ -1,10 +1,14 @@
+from sentence_transformers import SentenceTransformer
+
 from base.base_enricher import BaseEnricher
 from base.models import EnrichedProduct, PopularitySignals, Product
 
+
 class ProductEnricher(BaseEnricher):
 
-    def __init__(self, tags: dict) -> None:
+    def __init__(self, tags: dict, model_name: str = "all-MiniLM-L6-v2") -> None:
         self.tags = tags
+        self.embedding_model = SentenceTransformer(model_name)
 
     def derive_tags(self, product: Product, tags: dict) -> tuple[str | None, list[str], list[str]]:
         tag_data = tags.get(product.product_id, {})
@@ -31,6 +35,8 @@ class ProductEnricher(BaseEnricher):
         search_keywords, semantic_text = self.build_search_text(product, labels, synonyms)
         locale = self.normalize_locale(product)
 
+        embedding: list[float] = self.embedding_model.encode(semantic_text).tolist()
+
         return EnrichedProduct(
             product_id=product.product_id,
             name=product.name.strip(),
@@ -42,6 +48,7 @@ class ProductEnricher(BaseEnricher):
             synonyms=synonyms,
             search_keywords=search_keywords,
             semantic_text=semantic_text,
+            semantic_embedding=embedding,
             popularity=PopularitySignals(),
         )
 

@@ -1,13 +1,19 @@
 """Base indexer contract for search backends."""
 
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
 from base.models import EnrichedProduct
+
+if TYPE_CHECKING:
+    from indexing.index_config import IndexConfig
 
 
 class BaseIndexer(ABC):
     @abstractmethod
-    def create_index(self, index_name: str, body: dict | None = None) -> dict:
+    def create_index(self, index_name: str, config: IndexConfig | None = None) -> dict:
         """Create an index if it does not already exist."""
 
     @abstractmethod

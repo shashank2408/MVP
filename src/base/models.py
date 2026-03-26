@@ -31,6 +31,7 @@ class EnrichedProduct(Product):
     synonyms: list[str] = field(default_factory=list)
     search_keywords: list[str] = field(default_factory=list)
     semantic_text: str = ""
+    semantic_embedding: list[float] = field(default_factory=list)
     popularity: PopularitySignals = field(default_factory=PopularitySignals)
 
 class EventType(Enum):

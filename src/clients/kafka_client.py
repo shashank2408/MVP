@@ -63,8 +63,9 @@ class KafkaClient(BaseClient):
             self.connect()
 
         payload = json.dumps(self._serialize_event(event)).encode("utf-8")
-        self.client.send(topic, payload)
+        future = self.client.send(topic, payload)
         self.client.flush()
+        future.get(timeout=10)
 
     def poll(self, timeout_ms: int = 1000) -> list[Event]:
         if self.client_type != KafkaClientType.CONSUMER:
